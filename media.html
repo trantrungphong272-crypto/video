@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Thư viện Media của tôi</title>
+<style>
+  :root{
+    --bg:        #0b0d12;
+    --card:      #161a23;
+    --border:    #252a36;
+    --text:      #e8ecf4;
+    --muted:     #8b93a7;
+    --accent:    #6c8cff;
+    --radius:    14px;
+  }
+
+  *{ box-sizing: border-box; }
+
+  body{
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---------- HEADER ---------- */
+  header{
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(11,13,18,.85);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+    padding: 18px 24px;
+  }
+
+  .header-top{
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .brand{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: -.3px;
+    margin-right: auto;
+  }
+  .brand .dot{
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 14px var(--accent);
+  }
+
+  .search{
+    position: relative;
+  }
+  .search input{
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 9px 14px 9px 34px;
+    border-radius: 999px;
+    font-size: 14px;
+    width: 220px;
+    outline: none;
+    transition: border-color .18s, width .18s;
+  }
+  .search input:focus{
+    border-color: var(--accent);
+    width: 280px;
+  }
+  .search::before{
+    content: "🔍";
+    position: absolute;
+    left: 12px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    opacity: .55;
+    pointer-events: none;
+  }
+
+  .filters{
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    max-width: 1400px;
+    margin: 14px auto 0;
+  }
+  .chip{
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 7px 16px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .18s;
+    font-family: inherit;
+  }
+  .chip:hover{ color: var(--text); border-color: #3a4152; }
+  .chip.active{
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
+  /* ---------- GRID ---------- */
+  main{
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 28px 24px 80px;
+  }
+
+  .gallery{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 18px;
+  }
+
+  .card{
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform .22s cubic-bezier(.2,.7,.3,1), border-color .22s, box-shadow .22s;
+    animation: fadeUp .4s backwards;
+  }
+  .card:hover{
+    transform: translateY(-4px);
+    border-color: #3a4152;
+    box-shadow: 0 14px 34px rgba(0,0,0,.5);
+  }
+  @keyframes fadeUp{
+    from{ opacity: 0; transform: translateY(14px); }
+    to  { opacity: 1; transform: translateY(0); }
+  }
+
+  .thumb{
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    overflow: hidden;
+  }
+  .thumb img,
+  .thumb video{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    pointer-events: none;
+    transition: transform .35s;
+  }
+  .card:hover .thumb img,
+  .card:hover .thumb video{ transform: scale(1.06); }
+
+  .badge{
+    position: absolute;
+    top: 10px; left: 10px;
+    background: rgba(0,0,0,.62);
+    backdrop-filter: blur(6px);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .4px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    text-transform: uppercase;
+  }
+
+  .play{
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,.55));
+    opacity: .95;
+    transition: opacity .2s;
+  }
+  .play span{
+    width: 54px; height: 54px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.14);
+    border: 1.5px solid rgba(255,255,255,.5);
+    backdrop-filter: blur(4px);
+    display: grid;
+    place-items: center;
+    font-size: 19px;
+    color: #fff;
+    padding-left: 4px;
+    transition: transform .2s, background .2s;
+  }
+  .card:hover .play span{
+    transform: scale(1.12);
+    background: rgba(108,140,255,.75);
+  }
+
+  .meta{
+    padding: 12px 14px 14px;
+  }
+  .meta h3{
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.4;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+  .meta p{
+    margin: 5px 0 0;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* ---------- EMPTY ---------- */
+  .empty{
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 90px 20px;
+    color: var(--muted);
+  }
+  .empty .ico{ font-size: 46px; margin-bottom: 14px; opacity: .5; }
+  .empty p{ margin: 0; font-size: 15px; }
+
+  /* ---------- LIGHTBOX ---------- */
+  .lightbox{
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: rgba(6,7,10,.96);
+    backdrop-filter: blur(10px);
+    display: none;
+    flex-direction: column;
+  }
+  .lightbox.open{ display: flex; }
+
+  .lb-top{
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(255,255,255,.07);
+    flex-shrink: 0;
+  }
+  .lb-info{ margin-right: auto; min-width: 0; }
+  .lb-info h2{
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .lb-info span{
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .lb-btn{
+    background: rgba(255,255,255,.07);
+    border: 1px solid rgba(255,255,255,.12);
+    color: #fff;
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    font-size: 17px;
+    transition: .18s;
+    flex-shrink: 0;
+    text-decoration: none;
+  }
+  .lb-btn:hover{ background: rgba(255,255,255,.16); }
+
+  .lb-stage{
+    flex: 1;
+    display: grid;
+    place-items: center;
+    padding: 20px 76px;
+    min-height: 0;
+    position: relative;
+  }
+  .lb-stage img,
+  .lb-stage video{
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 10px;
+    box-shadow: 0 24px 70px rgba(0,0,0,.7);
+    display: block;
+    animation: pop .25s;
+  }
+  @keyframes pop{
+    from{ opacity: 0; transform: scale(.965); }
+    to  { opacity: 1; transform: scale(1); }
+  }
+
+  .lb-nav{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.14);
+    color: #fff;
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    font-size: 26px;
+    line-height: 1;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    transition: .18s;
+    z-index: 2;
+    padding-bottom: 4px;
+  }
+  .lb-nav:hover{ background: rgba(108,140,255,.7); border-color: transparent; }
+  .lb-nav.prev{ left: 16px; }
+  .lb-nav.next{ right: 16px; }
+  .lb-nav[disabled]{ opacity: .2; cursor: default; pointer-events: none; }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 720px){
+    header{ padding: 14px 16px; }
+    main{ padding: 20px 16px 60px; }
+    .brand{ font-size: 16px; }
+    .search input{ width: 100%; }
+    .search{ flex: 1 1 100%; }
+    .search input:focus{ width: 100%; }
+    .gallery{ grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+    .lb-stage{ padding: 12px; }
+    .lb-nav{ width: 40px; height: 40px; font-size: 22px; }
+    .lb-nav.prev{ left: 6px; }
+    .lb-nav.next{ right: 6px; }
+    .meta{ padding: 10px 11px 12px; }
+    .meta h3{ font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div class="brand"><span class="dot"></span> Thư viện của tôi</div>
+    <div class="search">
+      <input type="text" id="search" placeholder="Tìm kiếm..." />
+    </div>
+  </div>
+
+  <div class="filters" id="filters">
+    <button class="chip active" data-filter="all">Tất cả</button>
+    <button class="chip" data-filter="image">🖼️ Hình ảnh</button>
+    <button class="chip" data-filter="video">🎬 Video</button>
+  </div>
+</header>
+
+<main>
+  <div class="gallery" id="gallery"></div>
+</main>
+
+<!-- ============ LIGHTBOX ============ -->
+<div class="lightbox" id="lightbox">
+  <div class="lb-top">
+    <div class="lb-info">
+      <h2 id="lbTitle">—</h2>
+      <span id="lbCounter">—</span>
+    </div>
+    <a class="lb-btn" id="lbDownload" href="#" download title="Tải xuống">⬇</a>
+    <button class="lb-btn" id="lbClose" title="Đóng (Esc)">✕</button>
+  </div>
+
+  <div class="lb-stage" id="lbStage">
+    <button class="lb-nav prev" id="lbPrev" title="Trước (←)">‹</button>
+    <button class="lb-nav next" id="lbNext" title="Sau (→)">›</button>
+  </div>
+</div>
+
+<script>
+/* ================================================================
+   📌 CÁCH THÊM ẢNH / VIDEO CỦA BẠN
+
+   Mở mảng MEDIA bên dưới và thêm từng mục theo mẫu:
+
+   { type: "image", src: "media/anh1.jpg", title: "Tên ảnh" }
+   { type: "video", src: "media/clip.mp4",  title: "Tên video" }
+
+   - type  : "image" hoặc "video"
+   - src   : đường dẫn tới file. Có thể là:
+             • Link online  : https://...
+             • File cùng thư mục: media/anh1.jpg
+   - title : chữ hiển thị bên dưới (có thể bỏ trống)
+   ================================================================ */
+
+const MEDIA = [
+  {
+    type: "video",
+    src: "https://motionbgs.com/media/10102/dark-angel-rising.960x540.mp4",
+    title: "Dark Angel Rising"
+  },
+  {
+    type: "video",
+    src: "https://motionbgs.com/media/7009/mysteries-of-the-black-hole.960x540.mp4",
+    title: "Mysteries of the Black Hole"
+  },
+  {
+    type: "video",
+    src: "https://motionbgs.com/media/6727/levi-ackerman-dark.960x540.mp4",
+    title: "Levi Ackerman: Titan Slayer"
+  },
+  {
+    type: "image",
+    src: "https://i.ibb.co/YTk89Nsd/11013102469-116698481202803-1789005859347.png",
+    title: ""
+  },
+  {
+    type: "image",
+    src: "https://theselfishmeme.co.uk/wp-content/uploads/2025/10/lien-quan-meme-che-51.webp",
+    title: ""
+  },
+  {
+    type: "image",
+    src: "https://i.ibb.co/4RMWfMp3/11013102469-116698481202803-1789268568057.png",
+    title: "xe huydai"
+  },
+];
+
+/* ================= LOGIC ================= */
+
+const gallery   = document.getElementById("gallery");
+const searchBox = document.getElementById("search");
+const chips     = document.querySelectorAll(".chip");
+
+const lightbox  = document.getElementById("lightbox");
+const lbStage   = document.getElementById("lbStage");
+const lbTitle   = document.getElementById("lbTitle");
+const lbCounter = document.getElementById("lbCounter");
+const lbDownload= document.getElementById("lbDownload");
+const lbPrev    = document.getElementById("lbPrev");
+const lbNext    = document.getElementById("lbNext");
+const lbClose   = document.getElementById("lbClose");
+
+let filterType = "all";
+let keyword    = "";
+let visible    = [];      // danh sách item đang hiển thị
+let current    = 0;       // vị trí đang xem trong lightbox
+
+/* ---------- RENDER GRID ---------- */
+function render(){
+  const kw = keyword.trim().toLowerCase();
+
+  visible = MEDIA.filter(item => {
+    const okType = filterType === "all" || item.type === filterType;
+    const okKw   = !kw || (item.title || "").toLowerCase().includes(kw);
+    return okType && okKw;
+  });
+
+  gallery.innerHTML = "";
+
+  if (!visible.length){
+    gallery.innerHTML = `
+      <div class="empty">
+        <div class="ico">🗂️</div>
+        <p>Không có nội dung nào để hiển thị.</p>
+      </div>`;
+    return;
+  }
+
+  visible.forEach((item, i) => {
+    const card = document.createElement("article");
+    card.className = "card";
+    card.style.animationDelay = Math.min(i * 35, 500) + "ms";
+
+    const thumb = document.createElement("div");
+    thumb.className = "thumb";
+
+    if (item.type === "video"){
+      const v = document.createElement("video");
+      // #t=0.5 giúp trình duyệt hiển thị khung hình đầu làm ảnh bìa
+      v.src = item.src + "#t=0.5";
+      v.preload = "metadata";
+      v.muted = true;
+      v.playsInline = true;
+      thumb.appendChild(v);
+
+      const play = document.createElement("div");
+      play.className = "play";
+      play.innerHTML = "<span>▶</span>";
+      thumb.appendChild(play);
+    } else {
+      const img = document.createElement("img");
+      img.src = item.src;
+      img.alt = item.title || "";
+      img.loading = "lazy";
+      img.onerror = () => {
+        img.remove();
+        thumb.style.background =
+          "repeating-linear-gradient(45deg,#1a1e28,#1a1e28 10px,#151920 10px,#151920 20px)";
+      };
+      thumb.appendChild(img);
+    }
+
+    const badge = document.createElement("div");
+    badge.className = "badge";
+    badge.textContent = item.type === "video" ? "Video" : "Ảnh";
+    thumb.appendChild(badge);
+
+    const meta = document.createElement("div");
+    meta.className = "meta";
+    meta.innerHTML = `<h3></h3><p>${item.type === "video" ? "Video" : "Hình ảnh"}</p>`;
+    meta.querySelector("h3").textContent = item.title || "Không có tiêu đề";
+
+    card.appendChild(thumb);
+    card.appendChild(meta);
+    card.addEventListener("click", () => openLightbox(i));
+    gallery.appendChild(card);
+  });
+}
+
+/* ---------- LIGHTBOX ---------- */
+function openLightbox(index){
+  current = index;
+  lightbox.classList.add("open");
+  document.body.style.overflow = "hidden";
+  showItem();
+}
+
+function closeLightbox(){
+  lightbox.classList.remove("open");
+  document.body.style.overflow = "";
+  lbStage.querySelectorAll("img, video").forEach(el => el.remove());
+  const v = lbStage.querySelector("video");
+  if (v) v.pause();
+}
+
+function showItem(){
+  // dọn media cũ
+  lbStage.querySelectorAll("img, video").forEach(el => el.remove());
+
+  const item = visible[current];
+
+  if (item.type === "video"){
+    const v = document.createElement("video");
+    v.src = item.src;
+    v.controls = true;
+    v.autoplay = true;
+    v.playsInline = true;
+    lbStage.appendChild(v);
+  } else {
+    const img = document.createElement("img");
+    img.src = item.src;
+    img.alt = item.title || "";
+    lbStage.appendChild(img);
+  }
+
+  lbTitle.textContent   = item.title || "Không có tiêu đề";
+  lbCounter.textContent = `${current + 1} / ${visible.length}`;
+  lbDownload.href       = item.src;
+
+  lbPrev.disabled = current === 0;
+  lbNext.disabled = current === visible.length - 1;
+}
+
+function go(step){
+  const next = current + step;
+  if (next < 0 || next >= visible.length) return;
+  current = next;
+  showItem();
+}
+
+/* ---------- SỰ KIỆN ---------- */
+chips.forEach(chip => {
+  chip.addEventListener("click", () => {
+    chips.forEach(c => c.classList.remove("active"));
+    chip.classList.add("active");
+    filterType = chip.dataset.filter;
+    render();
+  });
+});
+
+searchBox.addEventListener("input", e => {
+  keyword = e.target.value;
+  render();
+});
+
+lbClose.addEventListener("click", closeLightbox);
+lbPrev.addEventListener("click", () => go(-1));
+lbNext.addEventListener("click", () => go(1));
+
+// click ra vùng nền đen để đóng
+lbStage.addEventListener("click", e => {
+  if (e.target === lbStage) closeLightbox();
+});
+
+// bàn phím
+document.addEventListener("keydown", e => {
+  if (!lightbox.classList.contains("open")) return;
+  if (e.key === "Escape")     closeLightbox();
+  if (e.key === "ArrowLeft")  go(-1);
+  if (e.key === "ArrowRight") go(1);
+});
+
+// vuốt trên điện thoại
+let touchX = null;
+lightbox.addEventListener("touchstart", e => {
+  touchX = e.changedTouches[0].clientX;
+}, { passive: true });
+
+lightbox.addEventListener("touchend", e => {
+  if (touchX === null) return;
+  const dx = e.changedTouches[0].clientX - touchX;
+  if (Math.abs(dx) > 60) go(dx < 0 ? 1 : -1);
+  touchX = null;
+}, { passive: true });
+
+/* ---------- KHỞI ĐỘNG ---------- */
+render();
+</script>
+
+</body>
+</html>
