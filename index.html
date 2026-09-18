@@ -39,7 +39,7 @@
   .header-top{
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
     flex-wrap: wrap;
     max-width: 1400px;
     margin: 0 auto;
@@ -61,9 +61,55 @@
     box-shadow: 0 0 14px var(--accent);
   }
 
-  .search{
-    position: relative;
+  /* ---------- CLOCK WIDGET ---------- */
+  .clock-widget{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 6px 6px 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
   }
+  .clock-widget .flag{ font-size: 14px; line-height: 1; }
+  .clock-widget .time{
+    font-weight: 700;
+    color: var(--accent);
+    font-size: 14px;
+    letter-spacing: .5px;
+  }
+  .clock-widget .date{
+    color: var(--muted);
+    font-size: 12px;
+    text-transform: capitalize;
+  }
+
+  /* Nút đổi định dạng */
+  .fmt-btn{
+    background: rgba(108,140,255,.14);
+    border: 1px solid rgba(108,140,255,.4);
+    color: var(--accent);
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: .5px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: .18s;
+    margin-left: 4px;
+  }
+  .fmt-btn:hover{
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+  .fmt-btn:active{ transform: scale(.94); }
+
+  .search{ position: relative; }
   .search input{
     background: var(--card);
     border: 1px solid var(--border);
@@ -206,9 +252,7 @@
     background: rgba(108,140,255,.75);
   }
 
-  .meta{
-    padding: 12px 14px 14px;
-  }
+  .meta{ padding: 12px 14px 14px; }
   .meta h3{
     margin: 0;
     font-size: 14px;
@@ -234,6 +278,75 @@
   }
   .empty .ico{ font-size: 46px; margin-bottom: 14px; opacity: .5; }
   .empty p{ margin: 0; font-size: 15px; }
+
+  /* ---------- CLOCK PANEL ---------- */
+  .clock-panel{
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 70px 20px;
+    background:
+      radial-gradient(circle at 50% 30%, rgba(108,140,255,.14), transparent 60%),
+      linear-gradient(145deg, var(--card), #1b2030);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    animation: fadeUp .4s;
+    text-align: center;
+  }
+  .clock-panel .flag{
+    font-size: 46px;
+    margin-bottom: 14px;
+    filter: drop-shadow(0 6px 18px rgba(0,0,0,.5));
+  }
+  .clock-panel .big-time{
+    font-size: clamp(52px, 11vw, 108px);
+    font-weight: 800;
+    letter-spacing: 3px;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    color: var(--accent);
+    text-shadow: 0 0 48px rgba(108,140,255,.45);
+    transition: font-size .2s;
+  }
+  .clock-panel .big-time.is-12h{
+    font-size: clamp(46px, 9.5vw, 92px);
+  }
+  .clock-panel .big-date{
+    margin-top: 16px;
+    font-size: 17px;
+    color: var(--text);
+    text-transform: capitalize;
+    opacity: .9;
+  }
+  .clock-panel .tz{
+    margin-top: 8px;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    opacity: .8;
+  }
+  .clock-panel .fmt-btn-lg{
+    margin-top: 26px;
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.14);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: .18s;
+  }
+  .clock-panel .fmt-btn-lg:hover{
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+  .clock-panel .fmt-btn-lg:active{ transform: scale(.96); }
 
   /* ---------- LIGHTBOX ---------- */
   .lightbox{
@@ -264,10 +377,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .lb-info span{
-    font-size: 12px;
-    color: var(--muted);
-  }
+  .lb-info span{ font-size: 12px; color: var(--muted); }
 
   .lb-btn{
     background: rgba(255,255,255,.07);
@@ -335,6 +445,10 @@
     header{ padding: 14px 16px; }
     main{ padding: 20px 16px 60px; }
     .brand{ font-size: 16px; }
+    .clock-widget{ padding: 4px 4px 4px 11px; font-size: 12px; gap: 6px; }
+    .clock-widget .time{ font-size: 13px; }
+    .clock-widget .date{ font-size: 11px; }
+    .fmt-btn{ font-size: 10px; padding: 4px 8px; }
     .search input{ width: 100%; }
     .search{ flex: 1 1 100%; }
     .search input:focus{ width: 100%; }
@@ -345,6 +459,7 @@
     .lb-nav.next{ right: 6px; }
     .meta{ padding: 10px 11px 12px; }
     .meta h3{ font-size: 13px; }
+    .clock-panel{ padding: 48px 16px; }
   }
 </style>
 </head>
@@ -353,6 +468,15 @@
 <header>
   <div class="header-top">
     <div class="brand"><span class="dot"></span> Thư viện của tôi</div>
+
+    <!-- ==== ĐỒNG HỒ VIỆT NAM ==== -->
+    <div class="clock-widget" title="Giờ Việt Nam (GMT+7)">
+      <span class="flag">🇻🇳</span>
+      <span class="time" id="clockTime">--:--:--</span>
+      <span class="date" id="clockDate">--</span>
+      <button class="fmt-btn" id="fmtToggle" title="Đổi định dạng 24H / 12H">24H</button>
+    </div>
+
     <div class="search">
       <input type="text" id="search" placeholder="Tìm kiếm..." />
     </div>
@@ -362,6 +486,7 @@
     <button class="chip active" data-filter="all">Tất cả</button>
     <button class="chip" data-filter="image">🖼️ Hình ảnh</button>
     <button class="chip" data-filter="video">🎬 Video</button>
+    <button class="chip" data-filter="clock">🕐 thời gian</button>
   </div>
 </header>
 
@@ -385,23 +510,7 @@
     <button class="lb-nav next" id="lbNext" title="Sau (→)">›</button>
   </div>
 </div>
-
 <script>
-/* ================================================================
-   📌 CÁCH THÊM ẢNH / VIDEO CỦA BẠN
-
-   Mở mảng MEDIA bên dưới và thêm từng mục theo mẫu:
-
-   { type: "image", src: "media/anh1.jpg", title: "Tên ảnh" }
-   { type: "video", src: "media/clip.mp4",  title: "Tên video" }
-
-   - type  : "image" hoặc "video"
-   - src   : đường dẫn tới file. Có thể là:
-             • Link online  : https://...
-             • File cùng thư mục: media/anh1.jpg
-   - title : chữ hiển thị bên dưới (có thể bỏ trống)
-   ================================================================ */
-
 const MEDIA = [
   {
     type: "video",
@@ -421,12 +530,12 @@ const MEDIA = [
   {
     type: "image",
     src: "https://i.ibb.co/YTk89Nsd/11013102469-116698481202803-1789005859347.png",
-    title: ""
+    title: "xe thaco"
   },
   {
     type: "image",
     src: "https://theselfishmeme.co.uk/wp-content/uploads/2025/10/lien-quan-meme-che-51.webp",
-    title: ""
+    title: "meme liên quân"
   },
   {
     type: "image",
@@ -462,12 +571,113 @@ const lbClose   = document.getElementById("lbClose");
 
 let filterType = "all";
 let keyword    = "";
-let visible    = [];      // danh sách item đang hiển thị
-let current    = 0;       // vị trí đang xem trong lightbox
+let visible    = [];
+let current    = 0;
+
+/* ============ ĐỒNG HỒ VIỆT NAM ============ */
+const TZ = "Asia/Ho_Chi_Minh";
+
+/* Trạng thái 24h / 12h — lưu vào localStorage */
+let hour12 = localStorage.getItem("clock12h") === "1";
+
+const fmt24 = new Intl.DateTimeFormat("vi-VN", {
+  timeZone: TZ,
+  hour: "2-digit", minute: "2-digit", second: "2-digit",
+  hour12: false
+});
+
+const fmt12 = new Intl.DateTimeFormat("vi-VN", {
+  timeZone: TZ,
+  hour: "2-digit", minute: "2-digit", second: "2-digit",
+  hour12: true
+});
+
+const dateFmt = new Intl.DateTimeFormat("vi-VN", {
+  timeZone: TZ,
+  weekday: "long", day: "2-digit", month: "2-digit", year: "numeric"
+});
+
+function formatTime(now){
+  return (hour12 ? fmt12 : fmt24).format(now);
+}
+
+function updateClock(){
+  const now  = new Date();
+  const time = formatTime(now);
+  const date = dateFmt.format(now);
+
+  // Widget nhỏ trên header
+  const elTime = document.getElementById("clockTime");
+  const elDate = document.getElementById("clockDate");
+  if (elTime) elTime.textContent = time;
+  if (elDate) elDate.textContent = date;
+
+  // Đồng hồ lớn trong panel
+  const bigTime = document.getElementById("clockBig");
+  const bigDate = document.getElementById("clockDay");
+  if (bigTime){
+    bigTime.textContent = time;
+    bigTime.classList.toggle("is-12h", hour12);
+  }
+  if (bigDate) bigDate.textContent = date;
+}
+
+/* Cập nhật nhãn các nút toggle cho khớp trạng thái */
+function syncToggleLabels(){
+  const btnSmall = document.getElementById("fmtToggle");
+  const btnBig   = document.getElementById("fmtToggleBig");
+
+  if (btnSmall){
+    // Khi đang là 24H → nút hiển thị "24H" (bấm để đổi)
+    // Khi đang là 12H → nút hiển thị "12H"
+    btnSmall.textContent = hour12 ? "12H" : "24H";
+    btnSmall.title = hour12
+      ? "Đang dùng 12 giờ — bấm để đổi sang 24 giờ"
+      : "Đang dùng 24 giờ — bấm để đổi sang 12 giờ";
+  }
+
+  if (btnBig){
+    btnBig.textContent = hour12
+      ? "🕛 Đang dùng 12 giờ (SA/CH) — đổi sang 24 giờ"
+      : "🕐 Đang dùng 24 giờ — đổi sang 12 giờ (SA/CH)";
+  }
+}
+
+/* Đổi định dạng */
+function toggleFormat(){
+  hour12 = !hour12;
+  localStorage.setItem("clock12h", hour12 ? "1" : "0");
+  syncToggleLabels();
+  updateClock();
+}
+
+/* Nút nhỏ ở header luôn tồn tại */
+document.getElementById("fmtToggle").addEventListener("click", toggleFormat);
 
 /* ---------- RENDER GRID ---------- */
 function render(){
   const kw = keyword.trim().toLowerCase();
+
+  /* Chế độ xem đồng hồ */
+  if (filterType === "clock"){
+    visible = [];
+    gallery.innerHTML = `
+      <div class="clock-panel">
+        <div class="flag">🇻🇳</div>
+        <div class="big-time" id="clockBig">--:--:--</div>
+        <div class="big-date" id="clockDay">--</div>
+        <div class="tz">Giờ Việt Nam · GMT+7</div>
+        <button class="fmt-btn-lg" id="fmtToggleBig"></button>
+      </div>`;
+
+    // Gắn sự kiện cho nút lớn (vì nó chỉ tồn tại khi bật chế độ đồng hồ)
+    document.getElementById("fmtToggleBig")
+            .addEventListener("click", toggleFormat);
+
+    syncToggleLabels();
+    updateClock();
+    return;
+  }
 
   visible = MEDIA.filter(item => {
     const okType = filterType === "all" || item.type === filterType;
@@ -496,7 +706,6 @@ function render(){
 
     if (item.type === "video"){
       const v = document.createElement("video");
-      // #t=0.5 giúp trình duyệt hiển thị khung hình đầu làm ảnh bìa
       v.src = item.src + "#t=0.5";
       v.preload = "metadata";
       v.muted = true;
@@ -554,7 +763,6 @@ function closeLightbox(){
 }
 
 function showItem(){
-  // dọn media cũ
   lbStage.querySelectorAll("img, video").forEach(el => el.remove());
 
   const item = visible[current];
@@ -607,12 +815,10 @@ lbClose.addEventListener("click", closeLightbox);
 lbPrev.addEventListener("click", () => go(-1));
 lbNext.addEventListener("click", () => go(1));
 
-// click ra vùng nền đen để đóng
 lbStage.addEventListener("click", e => {
   if (e.target === lbStage) closeLightbox();
 });
 
-// bàn phím
 document.addEventListener("keydown", e => {
   if (!lightbox.classList.contains("open")) return;
   if (e.key === "Escape")     closeLightbox();
@@ -620,7 +826,6 @@ document.addEventListener("keydown", e => {
   if (e.key === "ArrowRight") go(1);
 });
 
-// vuốt trên điện thoại
 let touchX = null;
 lightbox.addEventListener("touchstart", e => {
   touchX = e.changedTouches[0].clientX;
@@ -634,6 +839,9 @@ lightbox.addEventListener("touchend", e => {
 }, { passive: true });
 
 /* ---------- KHỞI ĐỘNG ---------- */
+syncToggleLabels();
+updateClock();
+setInterval(updateClock, 1000);
 render();
 </script>
 
